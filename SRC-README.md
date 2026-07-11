@@ -1,46 +1,42 @@
-# asapvw zsh shell .config
+# zsh
+
+Powerful but tastefully minimal zsh configuration.
 
 ## Dependencies
 
-### Setup Homebrew
-
-#### 1. Install prerequisites 
-
-```shell
-sudo apt-get install build-essential procps curl file git
-```
-
-#### 2. Install Homebrew
+### Arch
 
 ```sh
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+paru -S zsh neovim eza bat fd fzf zoxide starship ripgrep
 ```
 
-#### 3. Add Homebrew to shell runtime config
+### Ubuntu
 
-Add Homebrew to your `PATH` to your shell rcfile (`~/.bashrc` for `bash` or `~/.zshrc` for `zsh`).
-
-```shell
-test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
-test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
+```sh
+sudo apt install zsh neovim eza bat fd-find fzf ripgrep
+# install zoxide and starship separately
+curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
+curl -sS https://starship.rs/install.sh | sh
+# Ubuntu installs bat and fd under different names — symlink them so everything works
+ln -s $(which batcat) ~/.local/bin/bat
+ln -s $(which fdfind) ~/.local/bin/fd
 ```
 
-### Setup `zsh` shell
+### macOS
 
-#### 1. Install `zsh`
-
-```shell
-brew install zsh
+```sh
+brew install zsh neovim eza bat fd fzf zoxide starship ripgrep
 ```
 
-#### 2. Clone `zsh` config repo
+## Setup
 
-```shell
-git clone git@github.com:asapvw/zsh.git ~/.config/zsh
+**1. Clone the repo**
+
+```sh
+git clone https://github.com/radleylewis/zsh ~/.config/zsh
 ```
 
-#### 2. Point `zsh` at the `~/.config` directory
+**2. Point zsh at the config directory**
 
 Add the following to `/etc/zsh/zshenv`:
 
@@ -56,33 +52,22 @@ then
 fi
 ```
 
-#### 3. Configure `zsh` as default shell
+**3. Set zsh as your default shell**
 
-```shell
+```sh
 chsh -s $(which zsh)
 ```
 
-#### 4. Create required directories
+**4. Create required directories**
 
-```shell
+```sh
 mkdir -p ~/.local/state/zsh   # history
 mkdir -p ~/.cache/zsh         # completion cache
 ```
 
-#### 5. Start a new shell
-
-```shell
-xxx
-```
-
+**5. Start a new shell**
 
 Plugins are installed automatically on first launch via the built-in plugin manager.
-
-### Setup Shell Tools
-
-```shell
-brew install neovim eza bat fd fzf zoxide starship ripgrep
-```
 
 ## Plugins
 
