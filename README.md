@@ -34,45 +34,58 @@ echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bashrc
 brew install zsh
 ```
 
-#### 2. Clone `zsh` config repo
+#### 2. Get the repo into `~/.config/zsh`
+
+Clone it there directly, or symlink an existing working copy (the WSL setup
+symlinks the copy that lives on the Windows mount):
 
 ```shell
 git clone git@github.com:asapvw/zsh.git ~/.config/zsh
+# — or —
+ln -sn /mnt/c/Users/<you>/repos/zsh ~/.config/zsh
 ```
 
-#### 2. Point `zsh` at the `~/.config` directory
+#### 3. Point zsh at the config via `ZDOTDIR`
 
-Add the following to `/etc/zsh/zshenv`:
+Create a `~/.zshenv` bootstrap stub (no root needed):
 
 ```sh
-if [[ -z "$XDG_CONFIG_HOME" ]]
-then
+cat > ~/.zshenv <<'EOF'
+# Bootstrap stub — the real zsh config lives in $ZDOTDIR (~/.config/zsh).
+export ZDOTDIR="$HOME/.config/zsh"
+[[ -f "$ZDOTDIR/.zshenv" ]] && source "$ZDOTDIR/.zshenv"
+EOF
+```
+
+Alternatively (requires root, and then the stub is unnecessary), add to
+`/etc/zsh/zshenv`:
+
+```sh
+if [[ -z "$XDG_CONFIG_HOME" ]]; then
     export XDG_CONFIG_HOME="$HOME/.config"
 fi
-
-if [[ -d "$XDG_CONFIG_HOME/zsh" ]]
-then
+if [[ -d "$XDG_CONFIG_HOME/zsh" ]]; then
     export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 fi
 ```
 
-#### 3. Configure `zsh` as default shell
+#### 4. Configure `zsh` as default shell
 
 ```shell
 chsh -s $(which zsh)
 ```
 
-#### 4. Create required directories
+#### 5. Create required directories
 
 ```shell
 mkdir -p ~/.local/state/zsh   # history
 mkdir -p ~/.cache/zsh         # completion cache
 ```
 
-#### 5. Start a new shell
+#### 6. Start a new shell
 
 ```shell
-xxx
+exec zsh
 ```
 
 
@@ -86,7 +99,7 @@ brew install neovim eza bat fd fzf zoxide starship ripgrep
 
 ## Plugins
 
-Managed without a third-party plugin manager. Plugins are cloned into `$ZDOTDIR/plugins/` on first launch.
+Managed without a third-party plugin manager. Plugins are cloned into `~/.local/share/zsh/plugins/` on first launch (kept off `$ZDOTDIR`, which may sit on a slow `/mnt/c` mount in WSL).
 
 | Plugin | Purpose |
 |--------|---------|

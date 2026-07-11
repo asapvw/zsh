@@ -2,7 +2,9 @@
 # Plugins
 # =========================================================
 
-ZPLUGINDIR="${ZDOTDIR:-$HOME/.config/zsh}/plugins"
+# Plugins live on the native filesystem, not $ZDOTDIR: on WSL the config may
+# sit on /mnt/c (drvfs), where sourcing many small plugin files is slow.
+ZPLUGINDIR="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/plugins"
 
 _zplugin_load() {
   local plugin_path="${ZPLUGINDIR}/${2}"

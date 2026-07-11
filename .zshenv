@@ -1,6 +1,8 @@
 # =============================================================================
 # ~/.config/zsh/.zshenv — environment variables, sourced for ALL zsh sessions
-# Keep this file fast and side-effect free (no evals, no output)
+# Keep this file fast and quiet: no output, no slow commands. The only side
+# effect is a one-time cache write to ~/.zsh_local (WIN_HOME derivation).
+# Interactive-only setup (MANPAGER, GPG_TTY, tool inits) belongs in .zshrc.
 # =============================================================================
 
 # ---------- XDG base directories ----------
@@ -15,16 +17,6 @@ export XDG_STATE_HOME="$HOME/.local/state"
 export EDITOR="nvim"
 export VISUAL="nvim"
 
-# ---------- Pager ----------
-if command -v bat >/dev/null 2>&1; then
-  export MANPAGER="bat -l man -p"
-elif command -v batcat >/dev/null 2>&1; then
-  export MANPAGER="batcat -l man -p"
-fi
-
-# ---------- GPG ----------
-export GPG_TTY=$(tty)
-
 # ---------- Starship ----------
 export STARSHIP_CONFIG="$ZDOTDIR/starship.toml"
 
@@ -38,6 +30,8 @@ export PATH="$HOME/.local/bin:$PATH"
 #   1. ~/.zsh_local (per-machine, untracked) — authoritative if present
 #   2. $USERPROFILE via wslpath — fast, works when WSLENV forwards it
 #   3. cmd.exe query — fallback when $USERPROFILE is empty/unset
+# The derived value is cached to ~/.zsh_local so future shells (including
+# every non-interactive script) skip the slow wslpath/cmd.exe round-trips.
 # -----------------------------------------------------------------------------
 # Per-machine overrides (untracked), if present
 [[ -f ~/.zsh_local ]] && source ~/.zsh_local
@@ -50,6 +44,8 @@ if [[ -z "$WIN_HOME" ]]; then
   if [[ -z "$WIN_HOME" || "$WIN_HOME" == "." || ! -d "$WIN_HOME" ]]; then
     WIN_HOME="$(wslpath "$(cmd.exe /c 'echo %USERPROFILE%' 2>/dev/null | tr -d '\r')" 2>/dev/null)"
   fi
+  # Cache for future shells
+  [[ -d "$WIN_HOME" ]] && print -r -- "export WIN_HOME=\"$WIN_HOME\"" >> ~/.zsh_local
 fi
 export WIN_HOME
 

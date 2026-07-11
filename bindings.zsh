@@ -15,11 +15,17 @@ ZVM_VI_HIGHLIGHT_EXTRASTYLE=none
 # zsh-vi-mode resets all bindings on init, so custom bindings
 # must be registered via this hook to survive.
 zvm_after_init() {
-  # Ctrl+Right -> move forward one word (^[[1;5C is the terminal escape code)
-  bindkey '^[[1;5C' forward-word
+  # Restore fzf's Ctrl+R / Ctrl+T / Alt+C, which zvm just wiped
+  _fzf_shell_integration
 
-  # Ctrl+Left -> move backward one word (^[[1;5D is the terminal escape code)
+  # Ctrl+Right / Ctrl+Left -> move by word (^[[1;5C / ^[[1;5D are terminal escape codes)
+  bindkey '^[[1;5C' forward-word
   bindkey '^[[1;5D' backward-word
+
+  # Home / End / Del
+  bindkey '^[[H' beginning-of-line
+  bindkey '^[[F' end-of-line
+  bindkey '^[[3~' delete-char
 
   # Ctrl+F -> fzf file picker (no hidden files)
   bindkey '^F' _fzf_file_no_hidden
