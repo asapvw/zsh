@@ -62,6 +62,7 @@ y() { # yazi wrapper: cd to the directory yazi exited in
 
 alias yr='y "$REPOS"'     # browse $REPOS in yazi, cd to where you exit
 alias ywr='y "$WINREPOS"' # same for $WINREPOS
+alias yz='y "$ZDOTDIR"'     # browse $ZDOTDIR in yazi, cd to where you exit
 
 repo() { # fuzzy-pick a repo under $REPOS and cd into it
   local dir
@@ -96,7 +97,7 @@ alias lzg='lazygit'
 # Package updates
 # =========================================================
 
-alias bru='brew update && brew upgrade'
+alias bru='brew update && brew upgrade -y'
 alias aptu='sudo apt update && sudo apt upgrade -y'
 
 # =========================================================
