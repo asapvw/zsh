@@ -117,6 +117,14 @@ alias clip='clip.exe'            # pipes stdin to the Windows clipboard, e.g. `p
 # QoL 
 # =========================================================
 
+als() { # print current aliases, optionally filtered: `als git`
+    if (( $# )); then
+        alias | sort | grep -i --color=auto -- "$1"
+    else
+        alias | sort | bat -l zsh --style=plain --paging=never
+    fi
+}
+
 alias home='cd ~'
 alias reload='source $ZDOTDIR/.zshrc'
 alias path='echo -e ${PATH//:/\\n}'
