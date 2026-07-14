@@ -51,7 +51,8 @@ if [[ -z "$WIN_HOME" ]]; then
 fi
 export WIN_HOME
 
-export REPOS="$WIN_HOME/repos"
+export REPOS="$HOME/repos"
+export WINREPOS="$WIN_HOME/repos"
 export DOTFILES="$WIN_HOME/repos/dotfiles"
 export ASAPVW="$WIN_HOME/repos/asapvw.xcx"
 export QOPRODUCT="$WIN_HOME/repos/qo-product"

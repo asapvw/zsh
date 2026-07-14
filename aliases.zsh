@@ -14,12 +14,14 @@ alias la='eza -lah --icons --git'
 # Tree views
 alias tree='eza --tree --icons'
 alias lt='eza --tree --icons --level=2'
+alias lg='eza -l --icons --git --sort=modified'
 
 # Reuse ls completions for eza (avoids defining a separate completion function)
 compdef eza=ls
 
 # Better cat
-alias cat='bat'
+alias cat='bat --paging=never'
+alias catp='bat'  # with paging, for longer files
 
 # =========================================================
 # Core utilities
@@ -58,6 +60,9 @@ y() { # yazi wrapper: cd to the directory yazi exited in
     rm -f -- "$tmp"
 }
 
+alias yr='y "$REPOS"'     # browse $REPOS in yazi, cd to where you exit
+alias ywr='y "$WINREPOS"' # same for $WINREPOS
+
 repo() { # fuzzy-pick a repo under $REPOS and cd into it
   local dir
   dir=$(fd . "$REPOS" --max-depth 1 --type d | fzf --prompt="repo> ")
@@ -68,7 +73,8 @@ repo() { # fuzzy-pick a repo under $REPOS and cd into it
 # Editor
 # =========================================================
 
-alias vim='nvim'
+alias v='nvim'
+alias vi='nvim'
 
 # =========================================================
 # Git
@@ -77,7 +83,14 @@ alias vim='nvim'
 alias glog='PAGER="less -F -X" git log'                              # -F quit if one screen, -X no clear on exit
 alias gadog='PAGER="less -F -X" git log --all --decorate --oneline --graph'
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-alias lg='lazygit'
+alias g='git'
+alias gs='git status -sb'
+alias gd='git diff'
+alias gaa='git add -A'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph --decorate -20'
+alias lzg='lazygit'
 
 # =========================================================
 # Package updates
@@ -92,6 +105,23 @@ alias aptu='sudo apt update && sudo apt upgrade -y'
 
 alias resclaude='claude --resume'
 alias cleanpaste='xclip -selection clipboard -o | sed "s/[▏▕│┃]//g" | sed "s/[[:space:]]*$//" | xclip -selection clipboard -i'
+
+# =========================================================
+# WSL2
+# =========================================================
+
+alias explorer='explorer.exe .'  # opens Windows File Explorer in the current directory
+alias clip='clip.exe'            # pipes stdin to the Windows clipboard, e.g. `pwd | clip`
+
+# =========================================================
+# QoL 
+# =========================================================
+
+alias home='cd ~'
+alias reload='source $ZDOTDIR/.zshrc'
+alias path='echo -e ${PATH//:/\\n}'
+alias hist='history'
+alias c='clear'
 
 # =========================================================
 # Misc
