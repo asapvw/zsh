@@ -16,6 +16,10 @@ if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
   fpath=("$HOMEBREW_PREFIX/share/zsh/site-functions" $fpath)
 fi
 
+# Generated user completions (e.g. `pdm completion zsh > .../_pdm`) live on
+# the native filesystem for the same drvfs reason as plugins (see plugins.zsh)
+fpath=("${XDG_DATA_HOME:-$HOME/.local/share}/zsh/completions" $fpath)
+
 # Deduplicate entries accumulated across nested shells
 typeset -U path fpath
 
@@ -45,6 +49,9 @@ _ensure_links() {
     "$DOTFILES/cli/linux/yazi.toml"    "$HOME/.config/yazi/yazi.toml"
     "$DOTFILES/git/.gitconfig"         "$HOME/.gitconfig"
     "$DOTFILES/nvim"                   "$HOME/.config/nvim"
+    # Lets ~-based paths in the shared .gitconfig (core.excludesFile etc.)
+    # resolve identically on WSL and Windows
+    "$WIN_HOME/repos"                  "$HOME/repos"
   )
   for src target in "${(@kv)links}"; do
     if [[ ! -L "$target" || "$(readlink "$target")" != "$src" ]]; then
