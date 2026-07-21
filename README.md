@@ -71,6 +71,14 @@ fi
 
 #### 4. Configure `zsh` as default shell
 
+Add `zsh` to `/etc/shells`:
+
+```shell
+command -v zsh | sudo tee -a /etc/shells
+```
+
+Set `zsh` as default shell:
+
 ```shell
 chsh -s $(which zsh)
 ```
