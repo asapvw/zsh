@@ -62,6 +62,8 @@ brew "procps"
 brew "ripgrep"
 # Cross-shell prompt for astronauts
 brew "starship"
+# TUI-based PDF viewer
+brew "tdf"
 # Modernized, complete, self-contained TeX/LaTeX engine
 brew "tectonic"
 # Terminal multiplexer

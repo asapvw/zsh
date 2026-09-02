@@ -72,6 +72,26 @@ _ensure_links() {
 _ensure_links
 
 # =========================================================
+# Auto-launch tmux — replaces this shell (exec), so exiting
+# tmux closes the terminal. Rollback: set AUTO_TMUX=0 in
+# ~/.zsh_local (or remove this block) to restore the old
+# manual workflow (`t` to enter tmux). tmux-continuum
+# restores saved sessions when the server starts.
+# Must stay after brew shellenv (tmux is brew-installed) and
+# _ensure_links (tmux.conf symlink), before the config below
+# (redundant work for a shell about to exec away).
+# =========================================================
+
+if [[ "${AUTO_TMUX:-1}" != 0 ]] &&      # opt-out flag, set in ~/.zsh_local
+   [[ -z "$TMUX" ]] &&                  # not already inside tmux
+   [[ -z "$ZSH_EXECUTION_STRING" ]] &&  # not `zsh -i -c ...` (smoke tests, scripts)
+   [[ "$TERM_PROGRAM" != "vscode" ]] && # IDE terminals manage their own tabs
+   [[ -t 0 && -t 1 ]] &&                # real tty on stdin/stdout, not a pipe
+   command -v tmux >/dev/null 2>&1; then
+  exec tmux new-session -A -s main
+fi
+
+# =========================================================
 # History
 # =========================================================
 

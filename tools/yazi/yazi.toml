@@ -9,14 +9,20 @@ show_hidden = true
 
 [opener]
 # Define a named opener called "edit" that launches Neovim with
-# whatever file(s) were selected (supports multiple via "$@").
+# whatever file(s) were selected (%s = all selected paths; yazi ≥ 26.x
+# placeholder syntax — the old "$@"/"$1" style silently expands empty).
 # block = true tells Yazi to suspend itself and hand the terminal
 # over to Neovim until it exits, rather than running it detached.
 edit = [
-  { run = 'nvim "$@"', block = true },
+  { run = 'nvim %s', block = true },
 ]
 pdf_native = [
-    { run = 'wslview "$1"', desc = "Open in Windows default viewer", orphan = true }
+    { run = 'wslview %s1', desc = "Open in Windows default viewer", orphan = true }
+]
+# tdf is a TUI PDF viewer; block = true hands the terminal over to it
+# (same pattern as the "edit" opener) so it renders full-screen.
+pdf_tui = [
+    { run = 'tdf %s1', desc = "Open in tdf (terminal viewer)", block = true }
 ]
 [open]
 # Rules are matched in order, mapping file types to openers.
@@ -33,8 +39,9 @@ rules = [
   # own MIME type rather than falling under the text/* wildcard.
   { mime = "application/json", use = "edit" },
   
-  # WSL - open PDF files in native viewer on Windows
-  { mime = "application/pdf", use = "pdf_native" },
+  # PDFs: Enter opens tdf in the terminal (first opener is the default);
+  # "O" (open interactively) offers the Windows native viewer as well.
+  { mime = "application/pdf", use = ["pdf_tui", "pdf_native"] },
   
   # Wildcard fallback rule 
   { mime = "inode/empty", use = "edit" },

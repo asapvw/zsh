@@ -80,4 +80,4 @@ Keep this file under 500 lines. It is loaded into every session, and long contex
 
 ## Failure log
 
-- 
+- yazi (≥ 26.x from Homebrew) openers take `%s` / `%s1`-style placeholders, not `$@` / `$1` — the old `$`-style silently expands to empty and the opener exits with a confusing error (e.g. tdf's "Cannot canonicalize provided file"). 

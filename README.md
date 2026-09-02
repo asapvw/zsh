@@ -159,7 +159,23 @@ Config lives at `tools/tmux/tmux.conf` (symlinked to
 `~/.config/tmux/tmux.conf`). The prefix is `Ctrl+a`. The `t` function in
 `aliases.zsh` attaches to or creates a session: `t` → `main`, `t work` →
 `work`. Sessions survive restarts — tmux-resurrect + tmux-continuum save
-state periodically and restore it when the tmux server starts.
+state periodically (every 15 min by default) and restore it when the tmux
+server starts.
+
+### Auto-launch
+
+Interactive shells `exec` straight into tmux (attach-or-create session
+`main`), so a new terminal tab lands inside tmux with previously open
+sessions restored by continuum, and exiting tmux closes the terminal. The
+block in `.zshrc` skips: shells already inside tmux, `zsh -c` invocations
+(so the smoke tests never launch tmux), non-tty contexts (pipes, agents),
+and VS Code/IDE integrated terminals (`$TERM_PROGRAM == vscode`) — which
+also guarantees a tmux-free way in if the config ever breaks.
+
+**Rollback** to the manual workflow (plain zsh, enter tmux with `t`): add
+`AUTO_TMUX=0` to `~/.zsh_local` — the next shell behaves exactly as before,
+no repo change needed. To remove the behavior permanently, delete the
+"Auto-launch tmux" block in `.zshrc`.
 
 | Key (after prefix) | Action |
 |-----|--------|
