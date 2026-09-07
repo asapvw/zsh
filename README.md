@@ -21,6 +21,7 @@ tools/                         CLI tool configs, symlinked into ~/.config
 packages/                      what's installed on this machine
   Brewfile                     brew bundle manifest
   apt-manual.txt               manually-installed apt packages
+wsl/     wsl.conf              /etc/wsl.conf (copied in by bootstrap, not linked)
 bootstrap.zsh                  one-time new-machine setup
 ```
 
@@ -88,6 +89,21 @@ Plugins re-clone themselves to `~/.local/share/zsh/plugins/` on first
 launch and `_ensure_links` refreshes the tool-config symlinks; old plugin
 clones from previous layouts (e.g. `plugins/` inside the old repo) can be
 deleted, nothing references them.
+
+## WSL system config
+
+`/etc/wsl.conf` (per-distro: systemd, default user, Windows interop) is tracked
+at `wsl/wsl.conf` and installed by `bootstrap.zsh`. It is **copied**, not
+symlinked — WSL ignores `wsl.conf` when it lives on a world-writable path, which
+any `/mnt/c` symlink target is. Edit `wsl/wsl.conf`, re-run `bootstrap.zsh` (it
+backs up the old file and needs sudo), then apply from Windows:
+
+```shell
+wsl.exe --shutdown   # next launch reads the new /etc/wsl.conf
+```
+
+The Windows-global counterpart (`%USERPROFILE%\.wslconfig`: VM memory,
+networking) lives in the dotfiles repo at `windows/wsl/.wslconfig`.
 
 ## Packages
 

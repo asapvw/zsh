@@ -98,6 +98,23 @@ elif [[ -f ~/.zshrc ]]; then
   print "⚠ ~/.zshrc exists but is ignored now that ZDOTDIR is set — review and remove it manually"
 fi
 
+# -----------------------------------------------------------------------------
+# 4. WSL system config — /etc/wsl.conf. Root-owned, so copied not symlinked:
+#    WSL ignores wsl.conf on a world-writable path, which a /mnt/c symlink is
+#    (same reason ZDOTDIR can't live in /etc/zsh/zshenv here). Idempotent;
+#    backs up any existing file. Changes apply only after a `wsl.exe --shutdown`.
+# -----------------------------------------------------------------------------
+if [[ -f "$CLI_REPO/wsl/wsl.conf" ]]; then
+  if sudo cmp -s "$CLI_REPO/wsl/wsl.conf" /etc/wsl.conf 2>/dev/null; then
+    print "✓ /etc/wsl.conf already current"
+  else
+    [[ -f /etc/wsl.conf ]] && sudo cp /etc/wsl.conf /etc/wsl.conf.bak \
+      && print "→ backed up /etc/wsl.conf -> /etc/wsl.conf.bak"
+    sudo install -m 644 -o root -g root "$CLI_REPO/wsl/wsl.conf" /etc/wsl.conf
+    print "→ installed /etc/wsl.conf (run 'wsl.exe --shutdown' from Windows to apply)"
+  fi
+fi
+
 print ""
 print "Done. Start a fresh shell with:  exec zsh"
 print "(tool-config symlinks are created by _ensure_links on first launch)"

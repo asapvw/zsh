@@ -45,7 +45,8 @@ Consequences:
 - `starship.toml` — prompt config, loaded via `STARSHIP_CONFIG="$ZDOTDIR/starship.toml"` in `.zshenv`.
 - `tools/` — CLI tool configs (tmux, yazi, lazygit, btop, git ignore), symlinked into `~/.config` by `_ensure_links`. Edit these files here, not the symlink targets' neighbors in `~/.config`.
 - `packages/` — dumped Brewfile + apt manifest (see `pkgsync`).
-- `bootstrap.zsh` — one-time new-machine setup: installs packages from the manifests, wires `~/.config/zsh` + the `~/.zshenv` ZDOTDIR stub. Idempotent; run manually, never sourced.
+- `wsl/wsl.conf` — tracked copy of `/etc/wsl.conf` (per-distro: systemd, default user, interop). Root-owned system file, so `bootstrap.zsh` **copies** it in with sudo rather than symlinking — WSL ignores `wsl.conf` on a world-writable path, which a `/mnt/c` symlink target is (same constraint as `/etc/zsh/zshenv`). Edit here, re-run bootstrap, then `wsl.exe --shutdown` to apply. Not to be confused with the Windows-side `%USERPROFILE%\.wslconfig` in the dotfiles repo.
+- `bootstrap.zsh` — one-time new-machine setup: installs packages from the manifests, wires `~/.config/zsh` + the `~/.zshenv` ZDOTDIR stub, and copies `wsl/wsl.conf` to `/etc/wsl.conf`. Idempotent; run manually, never sourced.
 
 ## Plugin system
 
