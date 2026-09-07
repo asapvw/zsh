@@ -64,3 +64,9 @@ export DOTFILES="$WIN_HOME/repos/dotfiles"
 export ASAPVW="$WIN_HOME/repos/asapvw.xcx"
 export QOPRODUCT="$WIN_HOME/repos/qo-product"
 export QODOCS="$WIN_HOME/repos/qo-docs"
+
+# ---------- qo-product agent-browser ----------
+# Socket directory
+export AGENT_BROWSER_SOCKET_DIR=$HOME/.agent-browser/run
+# Encrypts any saved browser state at rest. Generate once, keep the value in the secrets manager, never in a file under the vault
+ab-key() { export AGENT_BROWSER_ENCRYPTION_KEY="$(op read 'op://Private/agent-browser encryption key/password')"; }

@@ -121,6 +121,7 @@ t() { # attach-or-create a tmux session: `t` -> main, `t work` -> work
 
 alias explorer='explorer.exe .'  # opens Windows File Explorer in the current directory
 alias clip='clip.exe'            # pipes stdin to the Windows clipboard, e.g. `pwd | clip`
+alias op=op.exe                  # 1Password CLI runs as the Windows binary with the desktop app's integration switched on
 
 # =========================================================
 # QoL 
